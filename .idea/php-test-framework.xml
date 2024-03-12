@@ -5,6 +5,7 @@
       <tool tool_name="PHPUnit">
         <cache>
           <versions>
+            <info id="LocalC:\xamp\xampp7\htdocs\todoRestore\todoGIT\todo\vendor\autoload.php" version="9.6.17" />
             <info id="LocalC:\xamp\xampp7\htdocs\todoRestore\todo\vendor\autoload.php" version="9.6.17" />
           </versions>
         </cache>
