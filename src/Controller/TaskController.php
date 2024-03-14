@@ -87,7 +87,6 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ["POST", "GET"])]
     public function deleteTaskAction(Task $task, ManagerRegistry $doctrine): Response
     {
-        //dd($this->getUser());
         $role = $this->getUser()->getRoles();
         if ($task->getUser()->getUsername() === "anonyme" && $role[0] == "ROLE_ADMIN"){
             $em = $doctrine->getManager();
@@ -114,5 +113,4 @@ class TaskController extends AbstractController
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone' => true])]);
     }
-
 }
