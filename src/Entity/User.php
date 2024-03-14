@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -17,34 +18,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=25, unique=true)
-     * @Assert\NotBlank(message="Vous devez saisir un nom d'utilisateur.")
-     */
-    #[ORM\Column(length: 25, unique: true, type: Types::STRING)]
-    //#[Assert\NotBlank(message="Vous devez saisir un nom d'utilisateur.")]
+
+    #[ORM\Column(type: Types::STRING, length: 25, unique: true)]
+    #[Assert\NotBlank(message:"Vous devez saisir un nom d'utilisateur.")]
     private String $username;
-
-    /**
-     * @ORM\Column(type="string", length=64)
-     */
-    #[ORM\Column(length: 64, type: Types::STRING)]
+    #[ORM\Column(type: Types::STRING, length: 64)]
     private String $password;
 
-    /**
-     * @ORM\Column(type="string", length=60, unique=true)
-     * @Assert\NotBlank(message="Vous devez saisir une adresse email.")
-     * @Assert\Email(message="Le format de l'adresse n'est pas correcte.")
-     */
-    #[ORM\Column(length: 60, unique: true, type: Types::STRING)]
+
+    #[ORM\Column(type: Types::STRING, length: 60, unique: true)]
+    #[Assert\NotBlank(message:"Vous devez saisir une adresse email.")]
+    #[Assert\Email(
+        message: "Le format de l'adresse n'est pas correcte.",
+    )]
     private String $email;
 
     #[ORM\Column]
     private array $role = [];
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Task::class)]
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'user')]
     private Collection $tasks;
 
     public function __construct()
@@ -52,66 +46,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->role = ["ROLE_USER"];
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUsername()
+
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @param mixed $username
-     */
-    public function setUsername($username)
+    public function setUsername($username): void
     {
         $this->username = $username;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password)
+
+    public function setPassword($password): void
     {
         $this->password = $password;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email)
+
+    public function setEmail($email): void
     {
         $this->email = $email;
     }
@@ -125,7 +99,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials() : void
     {
-        //return [];
     }
 
     public function getUserIdentifier(): string
