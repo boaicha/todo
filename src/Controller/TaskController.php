@@ -5,22 +5,24 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Form\TaskType;
+use App\Repository\TaskRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TaskController extends AbstractController
 {
 
-    #[Route('/tasks', name: 'task_list')]
-    public function listAction(ManagerRegistry $doctrine)
+    #[Route('/tasks', name: 'task_list', methods:['GET'])]
+    public function listAction(ManagerRegistry $doctrine): Response
     {
         return $this->render('task/list.html.twig', ['tasks' => $doctrine->getRepository(Task::class)->findAll()]);
     }
 
-    #[Route('/tasks/create', name: 'task_create')]
-    public function createAction(Request $request,ManagerRegistry $doctrine)
+    #[Route('/tasks/create', name: 'task_create', methods:['GET','POST'])]
+    public function createAction(Request $request,ManagerRegistry $doctrine): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -35,7 +37,6 @@ class TaskController extends AbstractController
             //
             // is done par defaut false a la creation
             $task->toggle(false);
-            //dd($this->getUser());
             $task->setUser($this->getUser());
             //
 
@@ -50,8 +51,8 @@ class TaskController extends AbstractController
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route('/tasks/{id}/edit', name: 'task_edit')]
-    public function editAction(Task $task, Request $request, ManagerRegistry $doctrine)
+    #[Route('/tasks/{id}/edit', name: 'task_edit', methods:["GET", "POST"])]
+    public function editAction(Task $task, Request $request, ManagerRegistry $doctrine): Response
     {
         $form = $this->createForm(TaskType::class, $task);
 
@@ -72,8 +73,8 @@ class TaskController extends AbstractController
     }
 
 
-    #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
-    public function toggleTaskAction(Task $task, ManagerRegistry $doctrine)
+    #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods:["POST", "GET"])]
+    public function toggleTaskAction(Task $task, ManagerRegistry $doctrine): Response
     {
         $task->toggle(!$task->getIsDone());
         $doctrine->getManager()->flush();
@@ -83,13 +84,11 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
-    #[Route('/tasks/{id}/delete', name: 'task_delete')]
-    public function deleteTaskAction(Task $task, ManagerRegistry $doctrine)
+    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ["POST", "GET"])]
+    public function deleteTaskAction(Task $task, ManagerRegistry $doctrine): Response
     {
-        //$user = $doctrine->getRepository(User::class)->find(User::class, $this->getUser()->getId());
         $role = $this->getUser()->getRoles();
-        //dd($role[0]);
-        if ($task->getUser() === null && $role[0] == "ROLE_ADMIN"){
+        if ($task->getUser()->getUsername() === "anonyme" && $role[0] == "ROLE_ADMIN"){
             $em = $doctrine->getManager();
             $em->remove($task);
             $em->flush();
@@ -101,7 +100,7 @@ class TaskController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été supprimée.');
-        } else {
+        } else if($task->getUser()->getUsername() === "anonyme" && $role[0] == "ROLE_USER") {
             $this->addFlash('error', 'Vous ne pouvez supprimer que vos taches');
         }
 
@@ -109,4 +108,9 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
+    #[Route('/tasks/done', name: 'tasks_done', methods: ['GET'])]
+    public function doneTasksListAction(TaskRepository $taskRepository): Response
+    {
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone' => true])]);
+    }
 }

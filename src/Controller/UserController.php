@@ -7,6 +7,7 @@ use App\Form\UserType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,14 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
 
-    #[Route('/users', name: 'user_list')]
-    public function listAction(ManagerRegistry $doctrine): \Symfony\Component\HttpFoundation\Response
+    #[Route('/users', name: 'user_list', methods: ["GET"])]
+    public function listAction(ManagerRegistry $doctrine): Response
     {
         return $this->render('user/list.html.twig', ['users' => $doctrine->getRepository(User::class)->findAll()]);
     }
 
 
-    #[Route('/users/create', name: 'user_create')]
+    #[Route('/users/create', name: 'user_create', methods: ["GET", "POST"])]
     public function createAction(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordEncoder): \Symfony\Component\HttpFoundation\Response
     {
         $user = new User();
@@ -45,10 +46,7 @@ class UserController extends AbstractController
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/users/{id}/edit", name="user_edit")
-     */
-    #[Route('/users/{id}/edit', name: 'user_edit')]
+    #[Route('/users/{id}/edit', name: 'user_edit', methods: ["GET", "POST"])]
     public function editAction(User $user, Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordEncoder): \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         $form = $this->createForm(UserType::class, $user);
