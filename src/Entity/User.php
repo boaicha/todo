@@ -51,7 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function setId($id): void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -62,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->username;
     }
 
-    public function setUsername($username): void
+    public function setUsername(String $username): void
     {
         $this->username = $username;
     }
@@ -74,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    public function setPassword($password): void
+    public function setPassword(String $password): void
     {
         $this->password = $password;
     }
@@ -85,7 +85,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    public function setEmail($email): void
+    public function setEmail(String $email): void
     {
         $this->email = $email;
     }

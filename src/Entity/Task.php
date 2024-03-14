@@ -45,7 +45,7 @@ class Task
         return $this->id;
     }
 
-    public function setId($id): void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -56,7 +56,7 @@ class Task
     }
 
 
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -68,7 +68,7 @@ class Task
     }
 
 
-    public function setTitle($title): void
+    public function setTitle(String $title): void
     {
         $this->title = $title;
     }
@@ -79,7 +79,7 @@ class Task
         return $this->content;
     }
 
-    public function setContent($content): void
+    public function setContent(String $content): void
     {
         $this->content = $content;
     }

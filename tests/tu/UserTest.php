@@ -3,7 +3,7 @@
 namespace App\Tests\tu;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
