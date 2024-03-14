@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Form\TaskType;
+use App\Repository\TaskRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,7 +73,7 @@ class TaskController extends AbstractController
     }
 
 
-    #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods:["POST"])]
+    #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods:["POST", "GET"])]
     public function toggleTaskAction(Task $task, ManagerRegistry $doctrine): Response
     {
         $task->toggle(!$task->getIsDone());
@@ -83,11 +84,12 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
-    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ["POST"])]
+    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ["POST", "GET"])]
     public function deleteTaskAction(Task $task, ManagerRegistry $doctrine): Response
     {
+        //dd($this->getUser());
         $role = $this->getUser()->getRoles();
-        if ($task->getUser() === null && $role[0] == "ROLE_ADMIN"){
+        if ($task->getUser()->getUsername() === "anonyme" && $role[0] == "ROLE_ADMIN"){
             $em = $doctrine->getManager();
             $em->remove($task);
             $em->flush();
@@ -99,12 +101,18 @@ class TaskController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été supprimée.');
-        } else {
+        } else if($task->getUser()->getUsername() === "anonyme" && $role[0] == "ROLE_USER") {
             $this->addFlash('error', 'Vous ne pouvez supprimer que vos taches');
         }
 
 
         return $this->redirectToRoute('task_list');
+    }
+
+    #[Route('/tasks/done', name: 'tasks_done', methods: ['GET'])]
+    public function doneTasksListAction(TaskRepository $taskRepository): Response
+    {
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone' => true])]);
     }
 
 }

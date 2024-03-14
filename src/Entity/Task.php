@@ -32,7 +32,7 @@ class Task
     private bool $isDone;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
-    private User $user;
+    private User|null $user = null;
 
     public function __construct()
     {

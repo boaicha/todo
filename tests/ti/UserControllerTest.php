@@ -147,7 +147,6 @@ class UserControllerTest extends WebTestCase
 
         $user = $userRepository->findOneByEmail($userEmail);
 
-        echo "TEST : ".$user->getId();
         $edit = $client->request('GET', '/users/' . $user->getId() . '/edit');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
