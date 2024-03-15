@@ -1,5 +1,7 @@
 # P8 : Todo List
 
+[![SymfonyInsight](https://insight.symfony.com/projects/cf18ef52-2e6c-4aa4-ab4c-881b59ecfce1/big.svg)](https://insight.symfony.com/projects/cf18ef52-2e6c-4aa4-ab4c-881b59ecfce1)
+
 ## Projet 8 du parcours Openclassroms
 
 ### Contexte
