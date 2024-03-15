@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route('/login', name: 'login')]
-    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils)
+    #[Route('/login', name: 'login', methods: ['GET', 'POST'])]
+    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils) : Response
     {
 
         if ($this->getUser()) {
@@ -33,9 +34,10 @@ class SecurityController extends AbstractController
     }
 
 
-    #[Route('/logout', name: 'logout')]
+    #[Route('/logout', name: 'logout', methods: ['GET','POST'])]
     public function logoutCheck() : void
     {
         // This code is never executed.
     }
+
 }

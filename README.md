@@ -73,3 +73,4 @@ php vendor/bin/phpunit --coverage-html coverage
 Vous trouverez les rapports de couvertures de tests dans le dossier "Coverage" à la racine du projet.
 
 Et tout devrait fonctionner sans soucis !
+
