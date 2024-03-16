@@ -94,13 +94,13 @@ class TaskController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été supprimée.');
-        }else if($task->getUser() === $this->getUser()){
+        }else if($task->getUser() === $this->getUser() || $role[0] == "ROLE_ADMIN"){
             $em = $doctrine->getManager();
             $em->remove($task);
             $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été supprimée.');
-        } else if($task->getUser()->getUsername() === "anonyme" && $role[0] == "ROLE_USER") {
+        } else if($task->getUser() !== $this->getUser() && $role[0] == "ROLE_USER") {
             $this->addFlash('error', 'Vous ne pouvez supprimer que vos taches');
         }
 

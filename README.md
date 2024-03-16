@@ -8,14 +8,14 @@
 
 Ce projet est réalisé dans le cadre de la formation de développeur d'application PHP/Symfony chez OpenClassrooms.
 
-La mission est de reprendre le développement d'une application type "Todo List" utilisant des versions assez anciennes afin de moderniser le code.
+La mission est de reprendre le développement d'une application type "Todo List" utilisant des versions assez anciennes afin de corriger le code et implementer de nouvelles fonctionnalités.
 
 Voici les différentes technologies utilisées dans ce projet :
 - Symfony - Php - Html - Css - Javascript - Boostrap - PhpUnit
 
 ### Installation
 
-CLoner le projet : 
+Cloner le projet : 
 ```bash
 gh repo clone https://github.com/boaicha/todo.git
 ```
